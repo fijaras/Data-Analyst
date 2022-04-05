@@ -1,0 +1,45 @@
+#Overall Performance by Year
+select left(order_date,4) years,sum(sales)as sales,count(order_status)number_of_order
+from dqlab_sales_store
+where left(order_date,4)<=2012 and order_status='Order Finished'
+group by years asc;
+
+#Overall Performance by Product Sub Category
+SELECT right(order_date,4) years, sum(sales) as sales, count(order_status) number_of_order
+from dqlab_sales_store
+where left(order_date,4)<=2012 and order_status ="Order Finished"
+group by years asc;
+
+#Promotion Effectiveness and Efficiency by Years
+select year(order_date) years,
+sum(sales) as sales,
+sum(discount_value) as promotion_value,
+round((sum(discount_value)/sum(sales))*100,2) as burn_rate_percentage
+from dqlab_sales_store
+where order_status='Order Finished'
+group by years;
+
+#Promotion Effectiveness and Efficiency by Product Sub Category
+select 
+	year(order_date) as years,
+	product_sub_category,
+	product_category,
+	sum(sales) as sales,
+	sum(discount_value) as promotion_value,
+round(sum(discount_value)/sum(sales)*100,2) as burn_rate_percentage
+from dqlab_sales_store
+where order_status ='Order Finished' and year(order_date)=2012
+group by 
+	years,
+	product_sub_category,
+	product_category
+order by sales DESC;
+
+#Customers Transactions per Year
+select
+	year(order_date) as years,
+	count(distinct customer) as number_of_customer
+	from dqlab_sales_store
+	where order_status = 'Order Finished'
+	group by years
+	order by years;
